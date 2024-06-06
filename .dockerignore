@@ -1,0 +1,8 @@
+# Files not necessary for the image to run
+.git
+.dockerignore
+.vscode
+Dockerfile
+node_modules
+**/ccxt
+**/.gitkeep

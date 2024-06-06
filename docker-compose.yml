@@ -1,0 +1,18 @@
+version: '3'
+services:
+
+  # Runs a CCXT SORA POLKASWAP CEX CONNECTOR BRIDGE build & test environment with all the required dependencies installed:
+  #
+  #     docker-compose run --rm ccxt-sora bash
+  #
+  ccxt-sora:
+    container_name: palmatrix-soramitsu-docker
+    image: spmx-image
+    build:
+      context: .
+    volumes:
+      - .:/pmx-dev
+      - /pmx-dev/src/ccxt/ # Prevents exposing container's ccxt folder to the host filesystem
+    entrypoint: /bin/bash
+    stdin_open: true
+    tty: true

@@ -1,0 +1,375 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "FastAPI", "version": "0.1.0" },
+  "paths": {
+    "/metadata": {
+      "get": {
+        "summary": "Get Metadata",
+        "operationId": "get_metadata_metadata_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/storage_functions": {
+      "get": {
+        "summary": "Get Storage Functions",
+        "operationId": "get_storage_functions_storage_functions_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/assets": {
+      "get": {
+        "summary": "Get Assets",
+        "operationId": "get_assets_assets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/asset/{code}": {
+      "get": {
+        "summary": "Get Asset",
+        "operationId": "get_asset_asset__code__get",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Code" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/asset_symbol/{symbol}": {
+      "get": {
+        "summary": "Get Asset Symbol",
+        "operationId": "get_asset_symbol_asset_symbol__symbol__get",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Symbol" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system_account/{account}": {
+      "get": {
+        "summary": "System Account",
+        "operationId": "system_account_system_account__account__get",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Account" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assets/{account}/{asset_id}": {
+      "get": {
+        "summary": "Assets Account",
+        "operationId": "assets_account_assets__account___asset_id__get",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Account" }
+          },
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Asset Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tokens_accounts/{account}/{asset_id}": {
+      "get": {
+        "summary": "Token Account",
+        "operationId": "token_account_tokens_accounts__account___asset_id__get",
+        "parameters": [
+          {
+            "name": "account",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Account" }
+          },
+          {
+            "name": "asset_id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Asset Id" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/get_dexes": {
+      "get": {
+        "summary": "Get Dexes",
+        "operationId": "get_dexes_get_dexes_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": { "application/json": { "schema": {} } }
+          }
+        }
+      }
+    },
+    "/markets": {
+      "get": {
+        "summary": "Get Markets",
+        "operationId": "get_markets_markets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": { "$ref": "#/components/schemas/Market" },
+                  "type": "array",
+                  "title": "Response Get Markets Markets Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/history/{market_name}": {
+      "get": {
+        "summary": "Get History",
+        "operationId": "get_history_history__market_name__get",
+        "parameters": [
+          {
+            "name": "market_name",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Market Name" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/History" },
+                  "title": "Response Get History History  Market Name  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ticker/{market_name}": {
+      "get": {
+        "summary": "Get Ticker",
+        "operationId": "get_ticker_ticker__market_name__get",
+        "parameters": [
+          {
+            "name": "market_name",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "title": "Market Name" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Order" },
+                  "title": "Response Get Ticker Ticker  Market Name  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": { "$ref": "#/components/schemas/ValidationError" },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "History": {
+        "properties": {
+          "date": { "type": "integer", "title": "Date" },
+          "type": { "type": "string", "title": "Type" },
+          "price": { "type": "number", "title": "Price" },
+          "quantity": { "type": "number", "title": "Quantity" }
+        },
+        "type": "object",
+        "required": ["date", "type", "price", "quantity"],
+        "title": "History"
+      },
+      "Market": {
+        "properties": {
+          "name": { "type": "string", "title": "Name" },
+          "price": { "type": "number", "title": "Price" },
+          "volume": { "type": "number", "title": "Volume" },
+          "initialprice": { "type": "number", "title": "Initialprice" },
+          "high": { "type": "number", "title": "High" },
+          "low": { "type": "number", "title": "Low" },
+          "bid": { "type": "number", "title": "Bid" },
+          "ask": { "type": "number", "title": "Ask" },
+          "basename": { "type": "string", "title": "Basename" }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "price",
+          "volume",
+          "initialprice",
+          "high",
+          "low",
+          "bid",
+          "ask",
+          "basename"
+        ],
+        "title": "Market"
+      },
+      "Order": {
+        "properties": {
+          "success": { "type": "boolean", "title": "Success" },
+          "s": { "type": "integer", "title": "S" },
+          "buy": { "type": "object", "title": "Buy" },
+          "sell": { "type": "object", "title": "Sell" }
+        },
+        "type": "object",
+        "required": ["success", "s", "buy", "sell"],
+        "title": "Order"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": { "type": "string", "title": "Message" },
+          "type": { "type": "string", "title": "Error Type" }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

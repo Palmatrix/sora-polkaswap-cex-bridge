@@ -1,0 +1,6 @@
+# TODO Check selected license type
+
+inheriting MIT from ccxt for now.
+ref: https://github.com/ccxt/ccxt/blob/master/LICENSE.txt
+
+purpose: create a ccxt-sora-polksaswap-cex connector exchange extension
