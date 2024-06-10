@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-# setup everything here
+# TODO: Implement or remove the script

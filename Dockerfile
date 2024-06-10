@@ -5,26 +5,30 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "Building Docker image..."
 
 ADD . /pmx-dev
+#make sure the script has the right permissions
+RUN chmod 755 /pmx-dev/scripts/setup-environment/setup-script-exec-rights.sh
+# give our scripts the right permissions
+RUN ./pmx-dev/scripts/setup-environment/setup-script-exec-rights.sh
 
 RUN mkdir /ccxt
 WORKDIR /ccxt
 
 RUN echo "installing some random stuff..."
 # clone https://github.com/Palmatrix-Ltd/ccxt.git to /ccxt
-RUN apt update && apt install -y git
-# avoid downloading 1GB of commit history by using --depth 1
-# checking out ccxt-sora branch
+RUN apt-get update && apt-get install -y git
+
 RUN echo "cloning ccxt repo..."
-RUN git clone --branch ccxt-sora --depth 1 https://github.com/Palmatrix-Ltd/ccxt.git /ccxt
-RUN echo "creating symlink for default ccxt folder..."
-RUN ln -s /ccxt /pmx-dev/src
+# avoid downloading 1GB of commit history by using --depth 1
+RUN git clone --branch master --depth 1 https://github.com/ccxt/ccxt.git /ccxt
+RUN echo "creating symlink from mounted data to ccxt folder..."
+RUN ln -s /pmx-dev /ccxt
 
 ################################################################
 # copied from ccxt docker setup:
 ################################################################
 
-# Update packages (use us.archive.ubuntu.com instead of archive.ubuntu.com — solves the painfully slow apt-get update)
-RUN sed -i 's/archive\.ubuntu\.com/us\.archive\.ubuntu\.com/' /etc/apt/sources.list
+# Update packages (use eu.archive.ubuntu.com instead of archive.ubuntu.com — should speed up apt-get update)
+RUN sed -i 's/archive\.ubuntu\.com/eu\.archive\.ubuntu\.com/' /etc/apt/sources.list
 
 # Miscellaneous deps
 RUN apt-get update && apt-get install -y --no-install-recommends curl gnupg git ca-certificates
@@ -75,22 +79,21 @@ RUN apt-get -y autoremove && apt-get clean && apt-get autoclean \
 
 # copy and merge our src/ccxt-sora-polkaswap/ts/*.ts sources into /ccxt"
 RUN echo "add sora.ts and ccxt implementation specific files..."
-# RUN cp -r /pmx-dev/src/ccxt-sora-polkaswap/ts/* /pmx-dev/src/ccxt/ts/src/
-# RUN cp /pmx-dev/src/ccxt-sora-polkaswap/ts/abstract/sora.ts /ccxt/ts/src/abstract
-# RUN cp /pmx-dev/src/ccxt-sora-polkaswap/ts/sora.ts /ccxt/ts/src
-# RUN cp /pmx-dev/src/ccxt-sora-polkaswap/ts/pro/sora.ts /ccxt/ts/src/pro
 
 ADD ./src/ccxt-sora-polkaswap/ts/abstract/sora.ts /ccxt/ts/src/abstract
+# RUN cp /ccxt/pmx-dev/ts/abstract/sora.ts /ccxt/ts/src/abstract
 ADD ./src/ccxt-sora-polkaswap/ts/sora.ts /ccxt/ts/src
-ADD ./src/ccxt-sora-polkaswap/ts/pro/sora.ts /ccxt/ts/pro
-ADD ./src/ccxt-sora-polkaswap/ccxt.ts /ccxt
-
+# RUN cp /ccxt/pmx-dev/ts/sora.ts /ccxt/ts/src/
+ADD ./src/ccxt-sora-polkaswap/ts/pro/sora.ts /ccxt/ts/src/pro
+# RUN cp /ccxt/pmx-dev/ts/pro/sora.ts /ccxt/ts/src/pro
 # TODO run script to merge /pmx-dev/src/ccxt-sora-polkaswap/ccxt.ts into /ccxt/ccxt.ts
 # RUN node /pmx-dev/src/ccxt-sora-polkaswap/merge_ccxt.ts
-
-RUN echo "building ccxt with npm...(might take a while)"
+# quick n dirty: just copy the file
+ADD ./src/ccxt-sora-polkaswap/ccxt.ts /ccxt/ts
+# RUN cp /ccxt/pmx-dev/ccxt.ts /ccxt/ts
+# uncomment to run the build in one go
+# RUN echo "building ccxt with npm...(might take a while)"
 # RUN npm run build
-
 RUN echo "docker setup executed successfully. Olè!"
 
-# [+] Building 799.0s (52/52) FINISHED
+# [+] Building 268.6s (56/56) FINISHED

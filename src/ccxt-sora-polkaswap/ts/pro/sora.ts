@@ -91,31 +91,27 @@ export default class sora extends soraRest {
     }
 
     async watchRequest (route, request) {
-        // request['action'] = route;
+        // request['method'] = route;
         const messageHash = this.buildMessageHash (route, request);
         this.checkMessageHashDoesNotExist (messageHash);
         const url = this.urls['api']['ws'];
         return await this.watch (url, messageHash, request, messageHash);
     }
 
-    buildRpcRequestAsJson (url: string, method: string, params = {}) {
-        const throwError = (fnName, arg) => {
-            throw new Error (`${fnName}: argument ${arg} is required`);
-        };
-        if (!url) return throwError (sora.name, 'url');
-        if (!method) return throwError (sora.name, 'method');
+    buildRpcRequestAsJson (method, params = {}) {
+        if (method === undefined) {
+            throw new NotSupported (this.id + ' buildRpcRequestAsJson: no method defined');
+        }
+        const safeParams = this.safeValue (params, 'params', []);
+        // if (safeParams === undefined) {
+        //     throw new NotSupported (this.id + ' buildRpcRequestAsJson: no params defined');
+        // }
         const rpcRequestAsJson = {
             'id': 1,
             'jsonrpc': '2.0',
             'method': method,
-            'params': params,
         };
-        // const { data } = await axiosInstance.post(url, {
-        //     id: 1,
-        //     jsonrpc: '2.0',
-        //     method,
-        //     params,
-        // });
+        rpcRequestAsJson['params'] = safeParams;
         return JSON.stringify (rpcRequestAsJson);
     }
 
@@ -167,50 +163,9 @@ export default class sora extends soraRest {
          */
         // await this.loadMarkets ();
         // await this.authenticate ();
-        const rpcCommand = 'assets_freeBalance';
-        const url = this.urls['api']['ws'];
-        const command = this.buildRpcRequestAsJson (url, rpcCommand, params);
-        console.log ('command', command);
-        // return await this.watchRequest (rpcCommand, params);
-        return await this.watch (url, command);
-    }
-
-    handleFetchBalance (client: Client, message) {
-        //  {
-        //      "jsonrpc":"2.0",
-        //      "result":   {
-        //                      "balance":"78208904346336173923352"
-        //                  },
-        //      "id":1
-        //  }
-        console.log ('handleFetchBalance', message);
-        const action = this.safeString (message, 'method', 'assets_freeBalance');
-        this.log ('action', action);
-        const messageHash = this.buildMessageHash (action, message);
-        this.log ('messageHash', messageHash);
-        const response = this.safeValue (message, 'response', []);
-        this.log ('response', response);
-        const balance = this.parseBalance (response);
-        this.log ('balance', balance);
-        client.resolve (balance, messageHash);
-    }
-
-    handleBalance (client: Client, message) {
-        //
-        //     {
-        //         "channel": "balance",
-        //         "reset": false,
-        //         "data": {
-        //             "USDT": {
-        //                 "available": "15",
-        //                 "total": "15"
-        //             }
-        //         }
-        //     }
-        //
-        const messageHash = 'balance';
-        this.parseWSBalance (message);
-        client.resolve (this.balance, messageHash);
+        const commandRoute = 'assets_freeBalance';
+        const command = this.buildRpcRequestAsJson (commandRoute, params);
+        return await this.watchRequest (commandRoute, command);
     }
 
     parseWSBalance (message) {
@@ -271,30 +226,58 @@ export default class sora extends soraRest {
     }
 
     handleMessage (client: Client, message) {
-        //
-        //     {
-        //         "errorCode": "INVALID_ARGUMENT",
-        //         "message": '',
-        //         "details": {
-        //             "interval": "invalid"
-        //         }
-        //     }
-        //
-        const errorCode = this.safeString (message, 'errorCode');
-        if (errorCode !== undefined) {
-            const messageString = this.json (message);
-            const error = new ExchangeError (this.id + ' ' + messageString);
+        // {
+        //      "jsonrpc": "2.0",
+        //      "method": "route_action",
+        //      "params": [],
+        //      "id": 1
+        // }
+        // {
+        //      "jsonrpc": "2.0",
+        //      "error":
+        //          {
+        //              "code": -32700,
+        //              "message": "Parse error"
+        //          },
+        //      "id": null
+        // }
+        const errorValue = this.safeValue (message, 'error');
+        if (errorValue !== undefined) {
+            const errorCode = this.safeString (errorValue, 'code');
+            const errorMessage = this.safeString (errorValue, 'message');
+            const error = new ExchangeError (this.id + ' ' + errorCode + ' ' + errorMessage);
             client.reject (error);
             return;
         }
-        const error2 = new NotSupported (this.id + ' handleMessage: unknown message: ' + this.json (message));
-        client.reject (error2);
+        const safeResult = this.safeValue (message, 'result', {});
+        if (safeResult !== undefined) {
+            const parsedBalance = this.parseBalance (safeResult);
+            if (parsedBalance !== undefined) {
+                // console.log ('parsedBalance', parsedBalance);
+                client.resolve (parsedBalance, 'assets_freeBalance');
+            }
+            const safeBalanceAsFloat = this.safeFloat (safeResult, 'balance');
+            if (safeBalanceAsFloat !== undefined) {
+                const safeBalanceFormatted = safeBalanceAsFloat * 0.000000000000000001; // 1e-18
+                client.resolve (safeBalanceFormatted, 'assets_freeBalance');
+                // this.handleFetchBalance (client, message);
+                // return;
+            }
+        }
+        const errorUnknown = new NotSupported (this.id + ' handleMessage: unknown message: ' + this.json (message));
+        client.reject (errorUnknown);
     }
 
     requestId () {
         const requestId = this.sum (this.safeInteger (this.options, 'requestId', 0), 1);
         this.options['requestId'] = requestId;
         return requestId;
+    }
+
+    handlePong (client: Client, message) {
+        console.log ('handlePong', message);
+        client.lastPong = this.milliseconds ();
+        return message;
     }
 
     async authenticate (params = {}) {

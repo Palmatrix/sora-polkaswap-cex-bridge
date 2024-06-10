@@ -8,19 +8,10 @@
 
 ## url
 
-internal project repo:
-
-https://github.com/Palmatrix-Ltd/sora-polkaswap-cex-bridge
-
-```shell
-git clone https://github.com/Palmatrix-Ltd/sora-polkaswap-cex-bridge.git
-```
-
 public project repo:
 
 https://github.com/Palmatrix/sora-polkaswap-cex-bridge
 
 ```shell
 git clone https://github.com/Palmatrix/sora-polkaswap-cex-bridge.git
-```
-
+```  

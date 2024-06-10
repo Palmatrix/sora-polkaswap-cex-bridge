@@ -1,11 +1,10 @@
 
 // ---------------------------------------------------------------------------
 
-import { Market } from '../ccxt.js';
 import Exchange from './abstract/sora.js';
 import { InsufficientFunds, AuthenticationError, BadRequest, ExchangeError } from './base/errors.js';
 import { TICK_SIZE } from './base/functions/number.js';
-import type { Int, Num, Order, OrderSide, OrderType, Str, Ticker, IndexType, Dict, int } from './base/types.js';
+import type { Int, Num, Market, Order, OrderSide, OrderType, Str, Ticker, IndexType, Dict, int } from './base/types.js';
 
 // ---------------------------------------------------------------------------
 
@@ -114,6 +113,8 @@ export default class sora extends Exchange {
                 'logo': 'https://github.com/Palmatrix/sora-polkaswap-cex-bridge/docs/assets/img/sora-logo.png',
                 'api': {
                     'rest': 'https://localhost:4262/api/v1',
+                    'sq-dev': 'https://api.subquery.network/sq/sora-xor/sora-staging',
+                    'sq-prod': 'https://api.subquery.network/sq/sora-xor/sora-prod',
                 },
                 'www': 'https://sora.org/',
                 'doc': 'https://github.com/Palmatrix/sora-polkaswap-cex-bridge/docs/api',
