@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "@polkadot/api": "^11.2.1",
+    "@polkadot/util-crypto": "^12.6.2"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

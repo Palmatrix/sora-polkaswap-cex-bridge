@@ -1,0 +1,40 @@
+$def with (data)
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Substrate Token Transfer</title>
+    <script src="static/bundle_1.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    
+    <h3>SEND 10 XOR FROM YOUR WALLET TO PALMA WALLET.</h3>
+
+    <input type="button" id="my_submit" value="submit transaction" onclick="signTransaction(localStorage.getItem('sora_wallet_seed'), 'cnSyrwqG6Wuwq3oxjiLUEWjSaJ1Bc4EJC2hKyKiFLJrxTxeiQ', '0x0200000000000000000000000000000000000000000000000000000000000000', '10' )">
+    <br>
+    <br>
+    Destination address (PALMA wallet):<br>cnSyrwqG6Wuwq3oxjiLUEWjSaJ1Bc4EJC2hKyKiFLJrxTxeiQ
+    <br><br>
+    Sora wallet seed from local storage used to sign transaction (only on device): <div id="sora_wallet_seed"> </div>
+    <br>
+    <script>
+        // get the seed from local storage
+        document.getElementById('sora_wallet_seed').textContent =  localStorage.getItem('sora_wallet_seed');
+    </script>
+
+
+
+    <input type="hidden" value="address_to" id="$data['address_to']">
+    <input type="hidden" value="token_id" id="$data['token_id']">
+    <input type="hidden" value="amount" id="$data['amount']">
+</body>
+</html>
+
+
+
+
